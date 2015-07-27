@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+
+{% block section %}
+    <h2>Blogs publicados</h2>
+    {% for blogs in blogs_list %}
+        <h3>{{blogs.username}}</h3>
+    {% endfor %}
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block section %}
+    <h1>Bienvenido a Wordplease</h1>
+    <p>Todos los posts de manera facil</p>
+
+    {% if posts_list|length > 0 %}
+        <h2>Últimos posts publicados</h2>
+        {% for post in posts_list %}
+            <h3><a href="{% url 'post_detail' username=post.owner postid=post.pk %}">{{post.titulo}}</a></h3>
+            <img src="{{ post.urlImage}}" alt="{{post.titulo}}" height="150">
+            <h4>{{post.resumen}}</h4>
+            <h5>Posted by {{post.owner}} on {{post.created_at}}  in {{post.categorias}}</h5>
+            <h3>{{post.pk}}</h3>
+        {% endfor %}
+    {% else %}
+        <h2>Sé el primero en publicar un Post!</h2>
+    {% endif %}
+{% endblock %}

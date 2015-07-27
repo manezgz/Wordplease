@@ -1,0 +1,9 @@
+TECNOLOGIA="TECH"
+LIBROS="LIBR"
+VIDEOJUEGOS="VGAM"
+
+CATEGORIES=(
+    (TECNOLOGIA,'Tecnologia'),
+    (LIBROS,'Libros'),
+    (VIDEOJUEGOS,'Videojuegos')
+)

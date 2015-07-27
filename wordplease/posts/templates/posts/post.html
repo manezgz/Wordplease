@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+    {%block title %} Detalle del Post {% endblock %}
+
+    {% block section %}
+        {% for post in posts_list %}
+            <h3>{{post.titulo}}</h3>
+            <img src="{{ post.urlImage}}" alt="{{post.titulo}}" height="150">
+            <h4>{{post.resumen}}</h4>
+            <h5>{{post.post_body}}</h5>
+            <h6>Posted by {{post.owner}} on {{post.created_at}}  in {{post.categorias}}</h6>
+            <h6>{{post.pk}}</h6>
+        {% endfor %}
+    {% endblock %}
