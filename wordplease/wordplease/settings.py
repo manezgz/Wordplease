@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'posts',
     'wordplease',
     'users',
+    'blogs',
     'rest_framework'
 )
 
@@ -125,3 +126,10 @@ LOGGING = {
 
 
 LOGIN_URL = '/login'
+
+
+REST_FRAMEWORK = {
+    'PAGINATE_BY' : 5,
+    'PAGINATE_BY_PARAM' : 'page_size',
+    'MAX_PAGINATE_BY' : 10
+}

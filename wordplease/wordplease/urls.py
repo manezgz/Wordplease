@@ -18,17 +18,19 @@ from django.contrib import admin
 from posts.views import HomeView
 from users.api import UserListAPI, UserDetailAPI
 from users.views import LoginView
+from blogs.api import BlogListAPI,BlogAPI
+from posts.api import PostListAPI,PostDetailAPI
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
 
     url(r'^$',HomeView.as_view(),name='home'),
 
-    url(r'^blogs/$','posts.views.blogs'),
+    url(r'^blogs/$','posts.views.blogs', name='blogs_gral'),
 
     url(r'^new-post$','posts.views.newPost', name='new_post'),
 
-    url(r'^blogs/(?P<username>\w{0,50})/$' , 'posts.views.blogposts'),
+    url(r'^blogs/(?P<username>\w{0,50})/$' , 'posts.views.blogposts', name='blog_user'),
 
     url(r'^blogs/(?P<username>\w{0,50})/(?P<postid>\d+)/$','posts.views.postDetail' , name='post_detail'),
 
@@ -40,5 +42,16 @@ urlpatterns = [
     # Users API URLs
     url(r'^api/1.0/users/$',UserListAPI.as_view(), name='user_list_api'),
 
-    url(r'^api/1.0/users/(?P<username>\w{0,50})$',UserDetailAPI.as_view(), name='user_list_api')
+    url(r'^api/1.0/users/(?P<username>\w{0,50})$',UserDetailAPI.as_view(), name='user_list_api'),
+
+    # Blogs API URLs
+     url(r'^api/1.0/blogs/$',BlogListAPI.as_view(), name='blog_list_api'),
+
+     url(r'^api/1.0/blogs/(?P<blogname>\w{0,50})$',BlogAPI.as_view(), name='blog_detail_api'),
+
+    # Posts API URLs
+     url(r'^api/1.0/posts/(?P<blogname>\w{0,50})/$',PostListAPI.as_view(), name='post_list_api'),
+
+     url(r'^api/1.0/posts/(?P<blogname>\w{0,50})/(?P<pk>\d+)/$',PostDetailAPI.as_view(), name='post_detail_api')
+
 ]

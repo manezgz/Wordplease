@@ -14,7 +14,7 @@ from django.views.generic import View
 class HomeView(View):
 
     def get(self,request):
-        posts=Post.objects.all().select_related('owner')
+        posts=Post.objects.all().select_related('owner').order_by('-created_at')
         context={
             'posts_list':posts[:30]
         }
@@ -43,7 +43,7 @@ def blogposts(request,username):
     #Sacamos el id del usuario
     user=User.objects.filter(username=username)
 
-    possible_posts=Post.objects.filter(owner=user)
+    possible_posts=Post.objects.filter(owner=user).order_by('-created_at')
     posts=possible_posts if len(possible_posts)>=1 else None
     if posts is not None:
         #cargamos los posts

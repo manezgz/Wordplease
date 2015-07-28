@@ -2,7 +2,7 @@
 
 {% block section %}
     <h2>Blogs publicados</h2>
-    {% for blogs in blogs_list %}
-        <h3>{{blogs.username}}</h3>
+    {% for blog in blogs_list %}
+        <h3><a href="{% url 'blog_user' username=blog.username %}">{{blog.username}}</a></h3>
     {% endfor %}
 {% endblock %}
