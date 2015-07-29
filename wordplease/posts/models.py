@@ -12,4 +12,4 @@ class Post(models.Model):
     created_at=models.DateTimeField(auto_now_add=True)
     modified_at=models.DateTimeField(auto_now=True)
     categorias=models.CharField(max_length=4,choices=CATEGORIES)
-    publication_date=models.DateFipythoneld
+    publication_date=models.DateField()

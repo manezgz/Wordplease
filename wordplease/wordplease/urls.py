@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from posts.views import HomeView
-from users.api import UserListAPI, UserDetailAPI
+from users.api import UserViewSet
 from users.views import LoginView
 from blogs.api import BlogListAPI,BlogAPI
 from posts.api import PostListAPI,PostDetailAPI
@@ -40,9 +40,9 @@ urlpatterns = [
 
 
     # Users API URLs
-    url(r'^api/1.0/users/$',UserListAPI.as_view(), name='user_list_api'),
+    #url(r'^api/1.0/users/$',UserViewSet.as_view(), name='user_list_api'),
 
-    url(r'^api/1.0/users/(?P<username>\w{0,50})$',UserDetailAPI.as_view(), name='user_list_api'),
+    #url(r'^api/1.0/users/(?P<username>\w{0,50})$',UserViewSet.as_view(), name='user_list_api'),
 
     # Blogs API URLs
      url(r'^api/1.0/blogs/$',BlogListAPI.as_view(), name='blog_list_api'),
