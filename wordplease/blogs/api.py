@@ -25,6 +25,10 @@ class BlogListAPI(APIView):
             strId=strId.replace(")","")
             s1.append(strId)
         users=User.objects.filter(pk__in=s1).order_by('username')
+        #Comprobamos Filtro
+        user_filter = self.request.query_params.get('name', None)
+        if user_filter is not None:
+            users=users.filter(username=user_filter)
         blogs= list()
         #Recorro lista de users y creo un obj blog para cada uno y lo meto en una lista
         for user in users:

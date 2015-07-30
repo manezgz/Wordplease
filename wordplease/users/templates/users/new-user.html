@@ -4,14 +4,82 @@
 
 {% block section %}
 
-        {% if success_message %} <span style="color:green">{{ success_message|safe }}</span> {% endif %}
+         <div class="col-md-12">
+                <h2>Singup Form</h2>
+         </div>
 
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <div>
-                <button>Crear Usuario</button>
+        {% if success_message %}
+            <div class="col-md-12">
+                <h4><span style="color:green">{{ success_message|safe }}</span></h4>
             </div>
-        </form>
+        {% endif %}
+
+
+
+         <form class="form-horizontal" role="form" method="post">
+                {% csrf_token %}
+				<div class="form-group">
+                    {{ form.first_name.errors }}
+                    <label for="{{ form.first_name.id_for_label }}" class="col-sm-2 control-label">
+						Nombre
+					</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" id="id_first_name" name="first_name" />
+					</div>
+				</div>
+				<div class="form-group">
+                    {{ form.last_name.errors }}
+                    <label for="{{ form.last_name.id_for_label }}" class="col-sm-2 control-label">
+						Apellidos
+					</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" id="id_last_name" name="last_name" />
+					</div>
+				</div>
+                <div class="form-group">
+                    {{ form.email.errors }}
+                    <label for="{{ form.email.id_for_label }}" class="col-sm-2 control-label">
+						Email
+					</label>
+					<div class="col-sm-10">
+						<input type="email" class="form-control" id="id_email" name="email" />
+					</div>
+				</div>
+                <div class="form-group">
+                    {{ form.username.errors }}
+                    <label for="{{ form.username.id_for_label }}" class="col-sm-2 control-label">
+						Username
+					</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" id="id_username" name="username" />
+					</div>
+				</div>
+                <div class="form-group">
+                    {{ form.password1.errors }}
+                    <label for="{{ form.password1.id_for_label }}" class="col-sm-2 control-label">
+						Password
+					</label>
+					<div class="col-sm-10">
+						<input type="password" class="form-control" id="id_password1" name="password1" />
+					</div>
+				</div>
+                 <div class="form-group">
+                    {{ form.password2.errors }}
+                    <label for="{{ form.password2.id_for_label }}" class="col-sm-2 control-label">
+						Confirmar Password
+					</label>
+					<div class="col-sm-10">
+						<input type="password" class="form-control" id="id_password2" name="password2" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+
+						<button type="submit" class="btn btn-default">
+							Sign in
+						</button>
+					</div>
+				</div>
+			</form>
 
 {% endblock %}

@@ -22,7 +22,9 @@
                             <p>
                                 <h5>Published by {{post.owner}} on {{post.publication_date}}  </h5>
                             </p>
-                            <span class="label label-default">{{post.categorias}}</span>
+                            {% for categoria in post.categorias.all %}
+                                <span class="label label-default">{{categoria.description}}</span>
+                            {% endfor %}
                         </div>
 			        </div>
             </div>
@@ -52,7 +54,7 @@
         </div>
     {% else %}
             <div class="col-md-12">
-            <h2>Sé el primero en publicar un Post!</h2>
+            <h2>Aun no hay posts publicados!</h2>
             </div>
     {% endif %}
 {% endblock %}

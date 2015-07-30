@@ -6,8 +6,8 @@ from django.contrib.auth.models import User
 
 class LoginForm(forms.Form):
 
-    usr = forms.CharField(label="Usuario")
-    pwd = forms.CharField(label="Contraseña",widget=forms.PasswordInput())
+    usr = forms.CharField(label="Usuario",required=True)
+    pwd = forms.CharField(label="Contraseña",widget=forms.PasswordInput(),required=True)
 
 
 class UserCreateForm(UserCreationForm):

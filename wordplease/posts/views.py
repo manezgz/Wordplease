@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from categorias.models import Categoria
 
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse
@@ -18,21 +19,25 @@ class HomeView(View):
     def get(self,request):
         posts=Post.objects.all().select_related('owner').order_by('-publication_date')
         posts=posts.filter(publication_date__lte=datetime.now())
-        paginator = Paginator(posts,9)
-        page = request.GET.get('page')
-        try:
-            postsPaginated = paginator.page(page)
-        except PageNotAnInteger:
-            # If page is not an integer, deliver first page.
-            postsPaginated = paginator.page(1)
-        except EmptyPage:
-            # If page is out of range (e.g. 9999), deliver last page of results.
-            postsPaginated = paginator.page(paginator.num_pages)
-
-        context={
-            'posts_list':postsPaginated
-        }
+        context=createPaginatedContextFromPostsList(request,posts)
         return render(request,'posts/home.html',context)
+
+def createPaginatedContextFromPostsList(request,posts):
+    paginator = Paginator(posts,9)
+    page = request.GET.get('page')
+    try:
+        postsPaginated = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        postsPaginated = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        postsPaginated = paginator.page(paginator.num_pages)
+    context={
+        'posts_list':postsPaginated
+    }
+    return context
+
 
 
 def blogs(request):
@@ -53,20 +58,12 @@ def blogs(request):
     return render(request,'posts/blogs.html',context)
 
 def blogposts(request,username):
-
     #Sacamos el id del usuario
     user=User.objects.filter(username=username)
-
-    possible_posts=Post.objects.filter(owner=user).order_by('-created_at')
-    posts=possible_posts if len(possible_posts)>=1 else None
-    if posts is not None:
-        #cargamos los posts
-        context={
-            'posts_list':posts[:10]
-        }
-        return render(request,'posts/home.html',context)
-    else:
-        return HttpResponseNotFound() #404 NotFound
+    posts=Post.objects.all().select_related('owner').order_by('-publication_date')
+    posts=posts.filter(publication_date__lte=datetime.now(),owner=user)
+    context=createPaginatedContextFromPostsList(request,posts)
+    return render(request,'posts/home.html',context)
 
 def postDetail(request,username,postid):
     #Sacamos el id del usuario
@@ -91,6 +88,7 @@ def newPost(request):
    :return:
    """
    success_message=''
+   categorias =Categoria.objects.all()
    if request.method == 'GET':
        form=PostForm()
    else:
@@ -108,6 +106,7 @@ def newPost(request):
            form = PostForm()
    context = {
        'form' : form,
+       'categorias' : categorias,
        'success_message' : success_message
    }
    return render(request, 'posts/new-post.html',context)

@@ -29,15 +29,27 @@ class PostViewSet(ModelViewSet):
         except User.DoesNotExist:
             raise Http404("Blog does not exist")
 
+        posts=Post.objects.filter(owner=user).order_by('-publication_date')
+
         if self.action == 'list':
             if not self.request.user.is_authenticated():
-                posts = Post.objects.filter(owner=user, publication_date__lte=datetime.now())
-            elif self.request.user.is_superuser:
-                posts=Post.objects.filter(owner=user)
-            else:
-                posts=Post.objects.filter(owner=user).filter(Q(owner=self.request.user) | Q(publication_date__lte=datetime.now()))
-        else:
-            posts=Post.objects.filter(owner=user)
+                posts = posts.filter(publication_date__lte=datetime.now())
+            elif not self.request.user.is_superuser:
+                posts = posts.filter(Q(owner=self.request.user) | Q(publication_date__lte=datetime.now()))
+
+            #Comprobamos el titulo y el body
+            titulo = self.request.query_params.get('titulo', None)
+            if titulo is not None:
+                posts=posts.filter(titulo__contains=titulo)
+
+            contenido = self.request.query_params.get('contenido', None)
+            if contenido is not None:
+                posts=posts.filter(post_body__contains=contenido)
+
+            #Por ultimo el orden si no los pasan
+            orden = self.request.query_params.get('orden', None)
+            if orden is not None:
+                posts=posts.order_by(orden)
 
         return posts
 

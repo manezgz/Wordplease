@@ -27,25 +27,28 @@
 			</div>
             <nav>
                 <ul class="nav nav-tabs">
-                    <li class="active">
+                    <li >
                         <a href="{% url 'home' %}">Home</a>
                     </li>
                     <li>
                         <a href="{%url 'blogs_gral' %}">Blogs</a>
                     </li>
                     {% if user.is_authenticated %}
-                        <li class="disabled">
-                            <a href="#">Mi Blog</a>
+                        <li>
+                            <a href="{%url 'blog_user' user.username %}">Mi Blog</a>
                         </li>
-                        <li class="disabled">
+                        <li >
                             <a href="{%url 'new_post' %}">Crear Post</a>
                         </li>
-                        <li class="disabled">
+                        <li>
                             <a href="{%url 'users_logout' %}">Salir</a>
                         </li>
                     {% else %}
-                        <li class="disabled">
+                        <li >
                             <a href="{%url 'users_login' %}">Login</a>
+                        </li>
+                        <li >
+                            <a href="{%url 'user_signup' %}">Signup</a>
                         </li>
                     {% endif %}
                 </ul>

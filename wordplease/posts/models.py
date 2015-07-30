@@ -1,7 +1,7 @@
+from categorias.models import Categoria
 from django.db import models
 from django.contrib.auth.models import User
 from posts.settings import CATEGORIES
-
 
 class Post(models.Model):
     owner=models.ForeignKey(User)
@@ -11,5 +11,5 @@ class Post(models.Model):
     urlImage=models.URLField(null=True)
     created_at=models.DateTimeField(auto_now_add=True)
     modified_at=models.DateTimeField(auto_now=True)
-    categorias=models.CharField(max_length=4,choices=CATEGORIES)
+    categorias= models.ManyToManyField(Categoria)
     publication_date=models.DateField()

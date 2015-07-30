@@ -3,12 +3,24 @@
     {%block title %} Detalle del Post {% endblock %}
 
     {% block section %}
+        <div class="col-md-12">
+            <h2>Detalle del Post</h2>
+        </div>
+        <div class="col-md-12">
         {% for post in posts_list %}
             <h3>{{post.titulo}}</h3>
-            <img src="{{ post.urlImage}}" alt="{{post.titulo}}" height="150">
+            <img src="{{ post.urlImage}}" alt="{{post.titulo}}" class="img-thumbnail" />
             <h4>{{post.resumen}}</h4>
-            <h5>{{post.post_body}}</h5>
-            <h6>Posted by {{post.owner}} on {{post.created_at}}  in {{post.categorias}}</h6>
-            <h6>{{post.pk}}</h6>
+            <p>{{post.post_body}}</p>
+            <blockquote>
+				<p>
+					Published by {{post.owner}} on {{post.publication_date}}.
+				</p>
+                <small>Creation Date {{post.created_at}}</small>
+                {% for categoria in post.categorias.all %}
+                    <span class="label label-default">{{categoria.description}}</span>
+                {% endfor %}
+			</blockquote>
         {% endfor %}
+        </div>
     {% endblock %}
