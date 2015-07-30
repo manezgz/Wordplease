@@ -1,19 +1,58 @@
 {% extends 'base.html' %}
 
 {% block section %}
-    <h1>Bienvenido a Wordplease</h1>
-    <p>Todos los posts de manera facil</p>
-
     {% if posts_list|length > 0 %}
-        <h2>Últimos posts publicados</h2>
+            <div class="col-md-12">
+            <h2>Últimos posts publicados</h2>
+            </div>
         {% for post in posts_list %}
-            <h3><a href="{% url 'post_detail' username=post.owner postid=post.pk %}">{{post.titulo}}</a></h3>
-            <img src="{{ post.urlImage}}" alt="{{post.titulo}}" height="150">
-            <h4>{{post.resumen}}</h4>
-            <h5>Posted by {{post.owner}} on {{post.created_at}}  in {{post.categorias}}</h5>
-            <h3>{{post.pk}}</h3>
+            <div class="col-md-4">
+					<div class="thumbnail">
+                        <img src="{{ post.urlImage}}" alt="{{post.titulo}}" height="250">
+                        <div class="caption">
+                            <h3>
+								<a href="{% url 'post_detail' username=post.owner postid=post.pk %}">{{post.titulo}}</a>
+							</h3>
+							<p>
+								{{post.resumen}}
+							</p>
+							<p>
+								<a class="btn btn-primary" href="{% url 'post_detail' username=post.owner postid=post.pk %}">Ver Detalles</a>
+							</p>
+                            <p>
+                                <h5>Published by {{post.owner}} on {{post.publication_date}}  </h5>
+                            </p>
+                            <span class="label label-default">{{post.categorias}}</span>
+                        </div>
+			        </div>
+            </div>
         {% endfor %}
+        <div class="col-md-12">
+			<ul class="pagination">
+            {% if posts_list.has_previous %}
+                <li><a href="?page={{ posts_list.previous_page_number }}">Prev</a></li>
+            {% else %}
+                <li class="disabled"><a href="#">Prev</a></li>
+            {% endif %}
+
+            {% for num in posts_list.paginator.page_range %}
+              {% ifequal num posts_list.number %}
+                <li class="active"><a href="#">{{ num }}<span class="sr-only">(current)</span></a></li>
+              {% else %}
+                <li><a href="?page={{ num }}">{{ num }}</a></li>
+              {% endifequal %}
+            {% endfor %}
+
+            {% if posts_list.has_next %}
+              <li><a href="?page={{ posts_list.next_page_number }}">Next</a></li>
+            {% else %}
+              <li class="disabled"><a href="#">Next</a></li>
+            {% endif %}
+            </ul>
+        </div>
     {% else %}
-        <h2>Sé el primero en publicar un Post!</h2>
+            <div class="col-md-12">
+            <h2>Sé el primero en publicar un Post!</h2>
+            </div>
     {% endif %}
 {% endblock %}

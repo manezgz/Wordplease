@@ -1,50 +1,37 @@
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
+from django.http import Http404
 from rest_framework.response import Response
-from rest_framework.viewsets import GenericViewSet
+from rest_framework.viewsets import GenericViewSet, ModelViewSet
 from rest_framework.pagination import PageNumberPagination
 from users.serializers import UserSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from users.permissions import UserPermission
 
-class UserViewSet(GenericViewSet):
 
+class UserViewSet(ModelViewSet):
+    queryset = User.objects.all()
+    permission_classes = (UserPermission,)
     serializer_class = UserSerializer
-    pagination_class = PageNumberPagination
-    permission_classes = UserPermission
+    lookup_field = 'username'
 
-    def list(self, request):
-        users = User.objects.all()
-        serializer = UserSerializer(users, many=True)
-        return self.get_paginated_response(serializer.data)
-
-    def create(self,request):
-        serializer=UserSerializer(data=request.data)
-        if serializer.is_valid():
-            new_user=serializer.save()
-            return Response(serializer.data,status=status.HTTP_201_CREATED)
+    def get_queryset(self):
+        if self.action == 'list':
+            user=User.objects.all();
         else:
-            return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+            username = self.kwargs.get('username',None)
+            try:
+                user = User.objects.filter(username=username)
+            except User.DoesNotExist:
+                raise Http404("Blog does not exist")
 
-    def retrieve(self,request,username):
-        user = get_object_or_404(User, username=username)
-        self.check_object_permissions(request, user)  # compruebo si el usuario autenticado puede hacer GET en este user
-        serializer = UserSerializer(user)
-        return Response(serializer.data)
+        return user
 
-    def update(self,request,username):
-        user = get_object_or_404(User, username=username)
-        self.check_object_permissions(request, user)
-        serializer = UserSerializer(instance=user,data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data,status=status.HTTP_202_ACCEPTED)
-        else:
-            return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+    def perform_create(self, serializer):
+        password = make_password(self.request.data['password'])
+        serializer.save(password=password)
 
-    def destroy(self,request,username):
-        user = get_object_or_404(User, username=username)
-        self.check_object_permissions(request, user)
-        user.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
+    def perform_update(self, serializer):
+        password = make_password(self.request.data['password'])
+        serializer.save(password=password)

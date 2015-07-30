@@ -16,5 +16,8 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
         if request.user.is_superuser:
             return True
 
+        if request.method == 'GET' and view.action == 'list':
+            return True
+
         # Write permissions are only allowed to the owner of the snippet.
         return obj.owner == request.user

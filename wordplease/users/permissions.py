@@ -1,5 +1,6 @@
 from rest_framework.permissions import BasePermission
 
+MY_SAFE_METHODS = ('HEAD', 'OPTIONS')
 
 class UserPermission(BasePermission):
 
@@ -9,7 +10,17 @@ class UserPermission(BasePermission):
             return True
         elif request.user.is_superuser:
             return True
-        elif isinstance(view, User)
+        elif view.action != 'list' and request.user.is_authenticated():
+            return True
 
     def has_object_permission(self, request, view, obj):
-        return request.user.is_superuser or request.user == obj
+
+        if request.method in MY_SAFE_METHODS:
+            return True
+        if request.method == "POST":
+            return True
+        elif request.user.is_superuser:
+            return True
+        if request.method == 'GET' and view.action == 'list':
+            return False
+        return request.user == obj

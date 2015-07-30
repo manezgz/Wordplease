@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 from django.shortcuts import render,redirect
 from django.contrib.auth import logout as django_logout,authenticate, login as django_login
 # Create your views here.
-from users.forms import LoginForm
+from users.forms import LoginForm,UserCreateForm
 from django.views.generic import View
 
 class LoginView(View):
@@ -44,4 +46,28 @@ def logout(request):
     if request.user.is_authenticated():
         django_logout(request)
     return redirect('home')
+
+class SignupView(View):
+
+    def get(self,request):
+        form=UserCreateForm()
+        context = {
+            'form' : form
+        }
+        return render(request, 'users/new-user.html',context)
+
+
+    def post(self,request):
+       user = User()
+       form=UserCreateForm(request.POST,instance=user)
+       if form.is_valid():
+           new_post=form.save()
+           success_message = 'Guardado con éxito'
+           form = UserCreateForm()
+       context = {
+            'form' : form,
+            'success_message' : success_message
+       }
+       return render(request, 'posts/new-post.html',context)
+
 

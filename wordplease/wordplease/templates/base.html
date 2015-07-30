@@ -1,25 +1,66 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>{% block title %}Bienvenido a Wordplease - Todos posts de manera facil{% endblock %}</title>
-</head>
-<body>
-    <nav>
-        <a href="{% url 'home' %}">Home</a>
-        <a href="{%url 'blogs_gral' %}">Blogs</a>
-        {% if user.is_authenticated %}
-            <a href="{% url 'blog_user' username=user %}">Mi Blog</a>
-            <a href="{%url 'new_post' %}">Crear Post</a>
-            <a href="{%url 'users_logout' %}">Salir</a>
-        {% else %}
-            <a href="{%url 'users_login' %}">Login</a>
-        {% endif %}
-    </nav>
-    <section>
-        {% block section %} {% endblock %}
-    </section>
-    <hr>
-    <small>Wordplease Inc %copy; Todos los derechos reservados </small>
-</body>
+
+    <meta name="description" content="Source code generated using layoutit.com">
+    <meta name="author" content="LayoutIt!">
+
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+    {% load staticfiles %}
+  </head>
+  <body>
+
+    <div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="page-header">
+				<h1>
+					Wordplease <small>- Todos posts de manera facil </small>
+				</h1>
+			</div>
+            <nav>
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li>
+                        <a href="{%url 'blogs_gral' %}">Blogs</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                        <li class="disabled">
+                            <a href="#">Mi Blog</a>
+                        </li>
+                        <li class="disabled">
+                            <a href="{%url 'new_post' %}">Crear Post</a>
+                        </li>
+                        <li class="disabled">
+                            <a href="{%url 'users_logout' %}">Salir</a>
+                        </li>
+                    {% else %}
+                        <li class="disabled">
+                            <a href="{%url 'users_login' %}">Login</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        <section>
+            <div class="row">
+            {% block section %} {% endblock %}
+            </div>
+        </section>
+		</div>
+	</div>
+    </div>
+
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/scripts.js"></script>
+  </body>
 </html>
